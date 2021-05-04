@@ -9,10 +9,11 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.example.todomanagement.R
 import com.example.todomanagement.databinding.FragmentAddBinding
+import com.example.todomanagement.util.setupSnackbar
 import com.google.android.material.datepicker.MaterialDatePicker
+import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.timepicker.MaterialTimePicker
 import com.google.android.material.timepicker.TimeFormat
-import timber.log.Timber
 
 class AddFragment : Fragment() {
 
@@ -23,21 +24,35 @@ class AddFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         //初始化view model
-        viewModel = ViewModelProvider(this).get(AddViewModel::class.java)
+        viewModel = ViewModelProvider(this,
+                AddViewModelFactory(requireNotNull(this.activity).application))
+                .get(AddViewModel::class.java)
 
         val binding: FragmentAddBinding = DataBindingUtil
                 .inflate(inflater, R.layout.fragment_add, container, false)
-        //设置fab和 日期时间选择控件
-        binding.saveTaskFab.setOnClickListener {
-            saveTask()
-        }
+        // Set the lifecycle owner to the lifecycle of the view
+        binding.lifecycleOwner = this.viewLifecycleOwner
+        binding.viewmodel = this.viewModel
 
+        //设置fab和 日期时间选择控件
         binding.btnDateTimePicker.setOnClickListener {
             pickTime()
             pickDate()
         }
 
         return binding.root
+    }
+
+    /**
+     * 在onCreateView之后创建
+     */
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+        setupSnackbar()
+    }
+
+    private fun setupSnackbar() {
+        view?.setupSnackbar(this, viewModel.snackbarText, Snackbar.LENGTH_SHORT)
     }
 
     private fun pickTime() {
@@ -50,7 +65,8 @@ class AddFragment : Fragment() {
         timePicker.show(childFragmentManager, "选择时间")
         timePicker.addOnPositiveButtonClickListener {
             //获取时间
-            Timber.d(timePicker.minute.toString())
+            viewModel.time.value!!.minute = timePicker.minute
+            viewModel.time.value!!.hour = timePicker.hour
         }
     }
 
@@ -64,14 +80,7 @@ class AddFragment : Fragment() {
         datePicker.show(childFragmentManager, "选择")
         //获取日期
         datePicker.addOnPositiveButtonClickListener {
-
+            viewModel.time.value!!.date = datePicker.selection!!
         }
-    }
-
-    /**
-     * 更新任务
-     */
-    private fun saveTask() {
-
     }
 }

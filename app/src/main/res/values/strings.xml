@@ -3,4 +3,8 @@
     <string name="title_all">所有日程</string>
     <string name="title_oneday">我的一天</string>
     <string name="title_tasklist">任务清单</string>
+
+    <string name="empty_task_message">任务不能为空</string>
+    <string name="task_added_succeed">任务添加成功</string>
+
 </resources>

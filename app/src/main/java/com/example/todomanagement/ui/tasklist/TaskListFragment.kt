@@ -23,6 +23,8 @@ class TaskListFragment : Fragment() {
                 ViewModelProvider(this).get(TaskListViewModel::class.java)
         val binding: FragmentTasklistBinding = DataBindingUtil
                 .inflate(inflater, R.layout.fragment_tasklist, container, false)
+        binding.lifecycleOwner = this.viewLifecycleOwner
+        binding.taskListViewModel = this.taskListViewModel
 
 
         return binding.root

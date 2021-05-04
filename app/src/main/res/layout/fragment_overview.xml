@@ -7,7 +7,7 @@
 
         <variable
             name="allViewModel"
-            type="com.example.todomanagement.ui.all.AllViewModel" />
+            type="com.example.todomanagement.ui.overview.OverviewViewModel" />
     </data>
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
@@ -18,7 +18,8 @@
         <androidx.recyclerview.widget.RecyclerView
             android:layout_width="match_parent"
             android:id="@+id/recycler_view_all"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/add_task_fab"

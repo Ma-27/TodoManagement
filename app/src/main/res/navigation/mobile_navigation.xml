@@ -7,9 +7,9 @@
 
     <fragment
         android:id="@+id/navigation_all"
-        android:name="com.example.todomanagement.ui.all.AllFragment"
+        android:name="com.example.todomanagement.ui.overview.OverviewFragment"
         android:label="@string/title_all"
-        tools:layout="@layout/fragment_all">
+        tools:layout="@layout/fragment_overview">
         <action
             android:id="@+id/action_navigation_all_to_addFragment"
             app:destination="@id/addFragment" />
