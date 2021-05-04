@@ -25,7 +25,6 @@ class AllFragment : Fragment() {
         val binding: FragmentAllBinding = DataBindingUtil.inflate(
             inflater, R.layout.fragment_all, container, false
         )
-
         binding.lifecycleOwner = this
         binding.allViewModel = allViewModel
 

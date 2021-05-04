@@ -23,6 +23,8 @@ class OnedayFragment : Fragment() {
                 ViewModelProvider(this).get(OnedayViewModel::class.java)
         val binding: FragmentOnedayBinding = DataBindingUtil
                 .inflate(inflater, R.layout.fragment_oneday, container, false)
+        binding.lifecycleOwner = this.viewLifecycleOwner
+        binding.onedayViewModel = onedayViewModel
 
         return binding.root
     }
