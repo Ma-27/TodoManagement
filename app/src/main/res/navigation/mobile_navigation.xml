@@ -9,7 +9,11 @@
         android:id="@+id/navigation_all"
         android:name="com.example.todomanagement.ui.all.AllFragment"
         android:label="@string/title_all"
-        tools:layout="@layout/fragment_all" />
+        tools:layout="@layout/fragment_all">
+        <action
+            android:id="@+id/action_navigation_all_to_addFragment"
+            app:destination="@id/addFragment" />
+    </fragment>
 
     <fragment
         android:id="@+id/navigation_oneday"
@@ -22,4 +26,12 @@
         android:name="com.example.todomanagement.ui.tasklist.TaskListFragment"
         android:label="@string/title_tasklist"
         tools:layout="@layout/fragment_tasklist" />
+    <fragment
+        android:id="@+id/addFragment"
+        android:name="com.example.todomanagement.ui.add.AddFragment"
+        android:label="AddFragment">
+        <action
+            android:id="@+id/action_addFragment_to_navigation_all"
+            app:destination="@id/navigation_all" />
+    </fragment>
 </navigation>

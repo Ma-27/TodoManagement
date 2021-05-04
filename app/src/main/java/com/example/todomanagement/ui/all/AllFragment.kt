@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.findNavController
 import com.example.todomanagement.R
 import com.example.todomanagement.databinding.FragmentAllBinding
 
@@ -20,14 +21,18 @@ class AllFragment : Fragment() {
             savedInstanceState: Bundle?
     ): View? {
         allViewModel =
-                ViewModelProvider(this).get(AllViewModel::class.java)
+            ViewModelProvider(this).get(AllViewModel::class.java)
         val binding: FragmentAllBinding = DataBindingUtil.inflate(
-                inflater, R.layout.fragment_all, container, false
+            inflater, R.layout.fragment_all, container, false
         )
 
         binding.lifecycleOwner = this
         binding.allViewModel = allViewModel
 
+        //设置fab点击响应，导航到addFragment
+        binding.addTaskFab.setOnClickListener {
+            it.findNavController().navigate(R.id.action_navigation_all_to_addFragment)
+        }
         return binding.root
     }
 }
