@@ -1,6 +1,8 @@
 package com.example.todomanagement.ui.add
 
 import android.app.Application
+import android.app.NotificationManager
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -12,11 +14,12 @@ import com.example.todomanagement.database.TaskRoomDatabase
 import com.example.todomanagement.util.DateTimeFormatted
 import com.example.todomanagement.util.DateTimeHolder
 import com.example.todomanagement.util.Event
+import com.example.todomanagement.util.sendNotification
 import kotlinx.coroutines.launch
 
-class AddViewModel(application: Application) : AndroidViewModel(application) {
+class AddViewModel(private val app: Application) : AndroidViewModel(app) {
     private val tasksRepository: TaskRepository =
-            TaskRepository(TaskRoomDatabase.getInstance(application))
+            TaskRepository(TaskRoomDatabase.getInstance(app))
 
     // 绑定title
     val title = MutableLiveData<String>()
@@ -63,6 +66,8 @@ class AddViewModel(application: Application) : AndroidViewModel(application) {
 
         //没问题了，创建任务,防止currentTime为空
         createTask(Task(currentTitle, currentDescription, currentDateTime))
+
+        startTimer()
     }
 
     private fun createTask(task: Task) {
@@ -71,5 +76,15 @@ class AddViewModel(application: Application) : AndroidViewModel(application) {
             _taskUpdatedEvent.value = Event(Unit)
         }
         _snackbarText.value = Event(R.string.task_added_succeed)
+    }
+
+    private fun startTimer() {
+        //TODO 使用通知manager创建通知
+        val notificationManager = ContextCompat.getSystemService(
+                app, NotificationManager::class.java) as NotificationManager
+
+        //TODO 调用util类中的方法直接发送通知
+        notificationManager.sendNotification(title.value!!, description.value!!, app)
+        //notificationManager.cancelNotifications()
     }
 }

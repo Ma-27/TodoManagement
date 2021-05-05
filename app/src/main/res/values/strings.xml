@@ -9,5 +9,8 @@
     <string name="task_modified_succeed">任务修改成功</string>
 
     <string name="successfully_saved_task_message">任务已保存</string>
+    <string name="notification_channel_id">日程通知</string>
+    <string name="notification_title">日程提醒</string>
+    <string name="notification_channel_name">任务提醒通知</string>
 
 </resources>
