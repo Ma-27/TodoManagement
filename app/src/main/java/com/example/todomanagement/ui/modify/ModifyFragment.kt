@@ -1,6 +1,10 @@
 package com.example.todomanagement.ui.modify
 
 import android.annotation.SuppressLint
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.graphics.Color
+import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -43,12 +47,17 @@ class ModifyFragment : Fragment() {
             pickDate()
         }
 
+        //创建通知channel
+        createChannel(
+                getString(R.string.notification_channel_id),
+                getString(R.string.notification_channel_name)
+        )
+
         /*
         viewModel.time.observe(viewLifecycleOwner, Observer {
-            val timestamp = DateTimeFormatted.convertDateTimeToMillSec(it.date,it.hour,it.minute)
-            binding.tvModifyShowTime.text = DateTimeFormatted.formatDateTimeString(timestamp)
+            val timestamp = Converter.convertDateTimeToMillSec(it.date,it.hour,it.minute)
+            binding.tvModifyShowTime.text = Converter.formatDateTimeString(timestamp)
         })
-
          */
 
         return binding.root
@@ -89,6 +98,27 @@ class ModifyFragment : Fragment() {
         //获取日期
         datePicker.addOnPositiveButtonClickListener {
             viewModel.time.value!!.date = datePicker.selection!!
+        }
+    }
+
+    private fun createChannel(channelId: String, channelName: String) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val notificationChannel = NotificationChannel(
+                    channelId,
+                    channelName,
+                    //TODO 自定义importance为high
+                    NotificationManager.IMPORTANCE_HIGH
+            )
+
+            notificationChannel.enableLights(true)
+            notificationChannel.lightColor = Color.RED
+            notificationChannel.enableVibration(true)
+            notificationChannel.description = "新任务提醒"
+
+            val notificationManager = requireActivity().getSystemService(
+                    NotificationManager::class.java
+            )
+            notificationManager.createNotificationChannel(notificationChannel)
         }
     }
 

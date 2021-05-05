@@ -12,5 +12,6 @@
     <string name="notification_channel_id">日程通知</string>
     <string name="notification_title">日程提醒</string>
     <string name="notification_channel_name">任务提醒通知</string>
+    <string name="error_time_message">不能够设置之前的时间哦</string>
 
 </resources>

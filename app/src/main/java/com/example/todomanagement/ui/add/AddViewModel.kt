@@ -1,8 +1,12 @@
 package com.example.todomanagement.ui.add
 
+import android.app.AlarmManager
 import android.app.Application
-import android.app.NotificationManager
-import androidx.core.content.ContextCompat
+import android.app.PendingIntent
+import android.content.Context
+import android.content.Intent
+import android.os.SystemClock
+import androidx.core.app.AlarmManagerCompat
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -11,15 +15,23 @@ import com.example.todomanagement.R
 import com.example.todomanagement.database.Task
 import com.example.todomanagement.database.TaskRepository
 import com.example.todomanagement.database.TaskRoomDatabase
-import com.example.todomanagement.util.DateTimeFormatted
-import com.example.todomanagement.util.DateTimeHolder
+import com.example.todomanagement.receiver.AlarmReceiver
+import com.example.todomanagement.util.Converter
+import com.example.todomanagement.util.DateTime
 import com.example.todomanagement.util.Event
-import com.example.todomanagement.util.sendNotification
 import kotlinx.coroutines.launch
 
 class AddViewModel(private val app: Application) : AndroidViewModel(app) {
+    private val REQUEST_CODE = 0
+
     private val tasksRepository: TaskRepository =
             TaskRepository(TaskRoomDatabase.getInstance(app))
+
+    //alarm manager来调用pending intent计时
+    private val alarmManager = app.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+
+    //TODO 从这里启动alarm receiver服务，用来构建pending intent
+    private val notifyIntent = Intent(app, AlarmReceiver::class.java)
 
     // 绑定title
     val title = MutableLiveData<String>()
@@ -28,7 +40,7 @@ class AddViewModel(private val app: Application) : AndroidViewModel(app) {
     val description = MutableLiveData<String>()
 
     //时间辅助类，使用livedata响应用户更改
-    var time = MutableLiveData<DateTimeHolder>()
+    var time = MutableLiveData<DateTime>()
 
     //
     private val _dataLoading = MutableLiveData<Boolean>()
@@ -43,15 +55,18 @@ class AddViewModel(private val app: Application) : AndroidViewModel(app) {
     val taskUpdatedEvent: LiveData<Event<Unit>> = _taskUpdatedEvent
 
     init {
-        time.value = DateTimeHolder()
+        time.value = DateTime()
     }
 
+    /**
+     * 保存任务并设定闹钟，到时间就推送
+     */
     fun saveTask() {
         val currentTitle = title.value
         val currentDescription = description.value
         val currentDateTime =
                 time.value?.let {
-                    DateTimeFormatted.convertDateTimeToMillSec(it.date, it.hour, it.minute)
+                    Converter.convertDateTimeToMillSec(it.date, it.hour, it.minute)
                 }
 
         if (currentTitle == null || currentDescription == null) {
@@ -64,10 +79,20 @@ class AddViewModel(private val app: Application) : AndroidViewModel(app) {
             return
         }
 
+        val interval: Long = currentDateTime!! - System.currentTimeMillis()
+
+        if (interval < 0) {
+            _snackbarText.value = Event(R.string.error_time_message)
+            return
+        }
+
+        //向intent传递参数
+        notifyIntent.putExtra("TITLE", title.value)
+        notifyIntent.putExtra("DESCRIPTION", description.value)
+        //启动计时任务
+        startTimer(interval)
         //没问题了，创建任务,防止currentTime为空
         createTask(Task(currentTitle, currentDescription, currentDateTime))
-
-        startTimer()
     }
 
     private fun createTask(task: Task) {
@@ -78,13 +103,24 @@ class AddViewModel(private val app: Application) : AndroidViewModel(app) {
         _snackbarText.value = Event(R.string.task_added_succeed)
     }
 
-    private fun startTimer() {
-        //TODO 使用通知manager创建通知
-        val notificationManager = ContextCompat.getSystemService(
-                app, NotificationManager::class.java) as NotificationManager
+    private fun startTimer(interval: Long) {
+        //TODO SystemClock.elapsedRealtime() 是设备从开机到现在经历的时间
+        val triggerTime = SystemClock.elapsedRealtime() + interval
 
-        //TODO 调用util类中的方法直接发送通知
-        notificationManager.sendNotification(title.value!!, description.value!!, app)
-        //notificationManager.cancelNotifications()
+        //TODO 构建pending intent
+        val notifyPendingIntent: PendingIntent = PendingIntent.getBroadcast(
+                getApplication(),
+                REQUEST_CODE,
+                notifyIntent,
+                PendingIntent.FLAG_UPDATE_CURRENT
+        )
+
+        //TODO 启动推送的pending intent
+        AlarmManagerCompat.setExactAndAllowWhileIdle(
+                alarmManager,
+                AlarmManager.ELAPSED_REALTIME_WAKEUP,
+                triggerTime,
+                notifyPendingIntent
+        )
     }
 }
