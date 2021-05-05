@@ -10,30 +10,60 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
 import com.example.todomanagement.R
 import com.example.todomanagement.databinding.FragmentOverviewBinding
+import com.example.todomanagement.util.setupSnackbar
+import com.google.android.material.snackbar.Snackbar
+import timber.log.Timber
 
 class OverviewFragment : Fragment() {
 
-    private lateinit var overviewViewModel: OverviewViewModel
+    private lateinit var viewModel: OverviewViewModel
+
+    private lateinit var binding: FragmentOverviewBinding
+
+    private lateinit var listAdapter: OverviewAdapter
 
     override fun onCreateView(
             inflater: LayoutInflater,
             container: ViewGroup?,
             savedInstanceState: Bundle?
     ): View? {
-        overviewViewModel =
+        viewModel =
                 ViewModelProvider(this, OverviewModelFactory
                 (requireNotNull(activity).application)).get(OverviewViewModel::class.java)
 
-        val binding: FragmentOverviewBinding = DataBindingUtil.inflate(
+        binding = DataBindingUtil.inflate(
                 inflater, R.layout.fragment_overview, container, false
         )
         binding.lifecycleOwner = this
-        binding.allViewModel = overviewViewModel
+        binding.viewmodel = this.viewModel
 
         //设置fab点击响应，导航到addFragment
         binding.addTaskFab.setOnClickListener {
             it.findNavController().navigate(R.id.action_navigation_all_to_addFragment)
         }
         return binding.root
+    }
+
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+        setupSnackbar()
+        setupListAdapter()
+    }
+
+    private fun setupSnackbar() {
+        view?.setupSnackbar(this, viewModel.snackbarText, Snackbar.LENGTH_SHORT)
+        arguments?.let {
+            viewModel.showEditResultMessage()
+        }
+    }
+
+    private fun setupListAdapter() {
+        val viewModel = binding.viewmodel
+        if (viewModel != null) {
+            listAdapter = OverviewAdapter(viewModel)
+            binding.recyclerViewOverview.adapter = listAdapter
+        } else {
+            Timber.w("ViewModel not initialized when attempting to set up adapter.")
+        }
     }
 }

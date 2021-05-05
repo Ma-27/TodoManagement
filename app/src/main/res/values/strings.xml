@@ -7,4 +7,6 @@
     <string name="empty_task_message">任务不能为空</string>
     <string name="task_added_succeed">任务添加成功</string>
 
+    <string name="successfully_saved_task_message">任务已保存</string>
+
 </resources>

@@ -20,4 +20,8 @@ class TaskRepository(private val database: TaskRoomDatabase) {
             launch { database.taskDao.insertTask(task) }
         }
     }
+
+    fun observeTasks(): LiveData<List<Task>> {
+        return database.taskDao.observeTasks()
+    }
 }

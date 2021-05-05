@@ -6,7 +6,11 @@
     <data>
 
         <variable
-            name="allViewModel"
+            name="task"
+            type="com.example.todomanagement.database.Task" />
+
+        <variable
+            name="viewmodel"
             type="com.example.todomanagement.ui.overview.OverviewViewModel" />
     </data>
 
@@ -17,8 +21,9 @@
 
         <androidx.recyclerview.widget.RecyclerView
             android:layout_width="match_parent"
-            android:id="@+id/recycler_view_all"
+            android:id="@+id/recycler_view_overview"
             android:layout_height="match_parent"
+            app:items="@{viewmodel.items}"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -29,7 +34,7 @@
             android:layout_marginEnd="64sp"
             android:src="@drawable/ic_add"
             app:fabSize="normal"
-            app:layout_anchor="@id/recycler_view_all"
+            app:layout_anchor="@id/recycler_view_overview"
             app:layout_anchorGravity="bottom|right|end" />
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </layout>
