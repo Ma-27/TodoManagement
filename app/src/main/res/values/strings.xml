@@ -14,4 +14,7 @@
     <string name="notification_channel_name">任务提醒通知</string>
     <string name="error_time_message">不能够设置之前的时间哦</string>
 
+    <string name="task_marked_complete">任务已完成</string>
+    <string name="task_marked_active">要抓紧完成任务哦</string>
+
 </resources>

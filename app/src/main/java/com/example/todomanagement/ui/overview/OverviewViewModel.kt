@@ -4,11 +4,13 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.viewModelScope
 import com.example.todomanagement.R
 import com.example.todomanagement.database.Task
 import com.example.todomanagement.database.TaskRepository
 import com.example.todomanagement.database.TaskRoomDatabase
 import com.example.todomanagement.util.Event
+import kotlinx.coroutines.launch
 
 class OverviewViewModel(application: Application) : AndroidViewModel(application) {
     //获取数据库
@@ -43,5 +45,18 @@ class OverviewViewModel(application: Application) : AndroidViewModel(application
      */
     fun openTask(taskId: String) {
         _openTaskEvent.value = Event(taskId)
+    }
+
+    /**
+     * 当checkbox 选中完成任务时
+     */
+    fun completeTask(taskId: String, completed: Boolean) = viewModelScope.launch {
+        if (completed) {
+            tasksRepository.taskMarkedCompleted(taskId)
+            showSnackbarMessage(R.string.task_marked_complete)
+        } else {
+            tasksRepository.taskMarkedPending(taskId)
+            showSnackbarMessage(R.string.task_modified_succeed)
+        }
     }
 }

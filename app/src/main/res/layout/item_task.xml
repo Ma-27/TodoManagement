@@ -30,6 +30,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
+            android:onClick="@{(view) -> viewmodel.completeTask(task.id, ((CompoundButton)view).isChecked())}"
             android:checked="@{task.completed}" />
 
         <TextView

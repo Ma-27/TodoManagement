@@ -57,7 +57,7 @@ interface TaskDao {
     suspend fun updateTask(task: Task): Int
 
     /**
-     * 将任务变为已完成
+     * 改变任务的完成状态
      *
      * @param taskId    待更新的task
      * @param completed 待更新的状态

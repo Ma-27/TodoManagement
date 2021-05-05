@@ -54,4 +54,20 @@ class TaskRepository(private val database: TaskRoomDatabase) {
             }
         }
     }
+
+    suspend fun taskMarkedCompleted(taskId: String) {
+        coroutineScope {
+            launch {
+                database.taskDao.updateCompleted(taskId, true)
+            }
+        }
+    }
+
+    suspend fun taskMarkedPending(taskId: String) {
+        coroutineScope {
+            launch {
+                database.taskDao.updateCompleted(taskId, false)
+            }
+        }
+    }
 }
