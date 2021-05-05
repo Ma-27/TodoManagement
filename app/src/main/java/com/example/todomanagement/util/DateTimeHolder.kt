@@ -1,4 +1,4 @@
-package com.example.todomanagement.ui.add
+package com.example.todomanagement.util
 
 data class DateTimeHolder(
         var date: Long = System.currentTimeMillis(),

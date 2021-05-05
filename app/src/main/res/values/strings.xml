@@ -1,11 +1,12 @@
 <resources>
     <string name="app_name">日程管理</string>
-    <string name="title_all">所有日程</string>
+    <string name="title_overview">所有日程</string>
     <string name="title_oneday">我的一天</string>
     <string name="title_tasklist">任务清单</string>
 
     <string name="empty_task_message">任务不能为空</string>
     <string name="task_added_succeed">任务添加成功</string>
+    <string name="task_modified_succeed">任务修改成功</string>
 
     <string name="successfully_saved_task_message">任务已保存</string>
 

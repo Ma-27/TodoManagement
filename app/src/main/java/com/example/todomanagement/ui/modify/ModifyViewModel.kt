@@ -1,4 +1,4 @@
-package com.example.todomanagement.ui.add
+package com.example.todomanagement.ui.modify
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
@@ -14,22 +14,15 @@ import com.example.todomanagement.util.DateTimeHolder
 import com.example.todomanagement.util.Event
 import kotlinx.coroutines.launch
 
-class AddViewModel(application: Application) : AndroidViewModel(application) {
+class ModifyViewModel(application: Application, taskId: String) : AndroidViewModel(application) {
     private val tasksRepository: TaskRepository =
             TaskRepository(TaskRoomDatabase.getInstance(application))
 
-    // 绑定title
-    val title = MutableLiveData<String>()
-
-    // 绑定内容
-    val description = MutableLiveData<String>()
+    //获取当前编辑的task对象
+    val task = MutableLiveData<Task>()
 
     //时间辅助类，使用livedata响应用户更改
-    var time = MutableLiveData<DateTimeHolder>()
-
-    //
-    private val _dataLoading = MutableLiveData<Boolean>()
-    val dataLoading: LiveData<Boolean> = _dataLoading
+    val time = MutableLiveData<DateTimeHolder>()
 
     //snackbar显示内容
     private val _snackbarText = MutableLiveData<Event<Int>>()
@@ -40,17 +33,24 @@ class AddViewModel(application: Application) : AndroidViewModel(application) {
     val taskUpdatedEvent: LiveData<Event<Unit>> = _taskUpdatedEvent
 
     init {
-        time.value = DateTimeHolder()
+        viewModelScope.launch {
+            task.value = tasksRepository.getTaskById(taskId)
+        }
+        //将保存了的秒数转化为time和date
+        if (task.value != null) {
+            time.value = DateTimeFormatted.convertMillSecToDateTime(task.value!!.endTimeMilli)
+        } else {
+            time.value = DateTimeHolder()
+        }
     }
 
     fun saveTask() {
-        val currentTitle = title.value
-        val currentDescription = description.value
+        val currentTitle = task.value?.title
+        val currentDescription = task.value?.description
         val currentDateTime =
                 time.value?.let {
                     DateTimeFormatted.convertDateTimeToMillSec(it.date, it.hour, it.minute)
                 }
-
         if (currentTitle == null || currentDescription == null) {
             _snackbarText.value = Event(R.string.empty_task_message)
             return
@@ -61,8 +61,21 @@ class AddViewModel(application: Application) : AndroidViewModel(application) {
             return
         }
 
-        //没问题了，创建任务,防止currentTime为空
-        createTask(Task(currentTitle, currentDescription, currentDateTime))
+        //没问题了，更新数据
+        if (task.value == null) {
+            createTask(Task(currentTitle, currentDescription, currentDateTime))
+        } else {
+            task.value!!.endTimeMilli = currentDateTime
+            updateTask(task.value!!)
+        }
+    }
+
+    private fun updateTask(task: Task) {
+        viewModelScope.launch {
+            tasksRepository.updateTask(task)
+            _taskUpdatedEvent.value = Event(Unit)
+        }
+        _snackbarText.value = Event(R.string.task_modified_succeed)
     }
 
     private fun createTask(task: Task) {

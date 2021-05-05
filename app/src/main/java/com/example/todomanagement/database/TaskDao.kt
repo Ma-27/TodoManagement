@@ -6,11 +6,11 @@ import androidx.room.*
 @Dao
 interface TaskDao {
     /**
-     * 观察所有的task，随时更改
+     * 观察所有的task，随时更改,按新建时间先后排序
      *
      * @return 所有task
      */
-    @Query("SELECT * FROM Tasks")
+    @Query("SELECT * FROM Tasks ORDER BY start_time_milli DESC")
     fun observeTasks(): LiveData<List<Task>>
 
     /**
@@ -27,7 +27,7 @@ interface TaskDao {
      *
      * @return 返回非live data的格式 tasks.
      */
-    @Query("SELECT * FROM Tasks")
+    @Query("SELECT * FROM Tasks ORDER BY start_time_milli DESC")
     suspend fun getTasks(): List<Task>
 
     /**

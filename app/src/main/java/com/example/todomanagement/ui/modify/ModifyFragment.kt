@@ -1,5 +1,6 @@
-package com.example.todomanagement.ui.add
+package com.example.todomanagement.ui.modify
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -8,31 +9,33 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.example.todomanagement.R
-import com.example.todomanagement.databinding.FragmentAddBinding
+import com.example.todomanagement.databinding.FragmentModifyBinding
 import com.example.todomanagement.util.setupSnackbar
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.timepicker.MaterialTimePicker
 import com.google.android.material.timepicker.TimeFormat
 
-class AddFragment : Fragment() {
+class ModifyFragment : Fragment() {
+    private lateinit var viewModel: ModifyViewModel
 
-    private lateinit var viewModel: AddViewModel
+    @SuppressLint("LogNotTimber")
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
+                              savedInstanceState: Bundle?): View? {
+        //获得参数
+        val args: ModifyFragmentArgs = ModifyFragmentArgs.fromBundle(requireArguments())
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
         //初始化view model
         viewModel = ViewModelProvider(this,
-                AddViewModelFactory(requireNotNull(this.activity).application))
-                .get(AddViewModel::class.java)
+                ModifyViewModelFactory(requireNotNull(this.activity).application, args.taskId))
+                .get(ModifyViewModel::class.java)
 
-        val binding: FragmentAddBinding = DataBindingUtil
-                .inflate(inflater, R.layout.fragment_add, container, false)
+        val binding: FragmentModifyBinding = DataBindingUtil
+                .inflate(inflater, R.layout.fragment_modify, container, false)
+
         // 设置life cycle owner
         binding.lifecycleOwner = this.viewLifecycleOwner
-        binding.viewmodel = this.viewModel
+        binding.viewmodel = viewModel
 
         //设置fab和 日期时间选择控件
         binding.btnDateTimePicker.setOnClickListener {
@@ -40,12 +43,17 @@ class AddFragment : Fragment() {
             pickDate()
         }
 
+        /*
+        viewModel.time.observe(viewLifecycleOwner, Observer {
+            val timestamp = DateTimeFormatted.convertDateTimeToMillSec(it.date,it.hour,it.minute)
+            binding.tvModifyShowTime.text = DateTimeFormatted.formatDateTimeString(timestamp)
+        })
+
+         */
+
         return binding.root
     }
 
-    /**
-     * 在onCreateView之后创建
-     */
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         setupSnackbar()
@@ -58,8 +66,8 @@ class AddFragment : Fragment() {
     private fun pickTime() {
         val timePicker = MaterialTimePicker.Builder()
                 .setTimeFormat(TimeFormat.CLOCK_12H)
-                .setHour(MaterialTimePicker.STYLE_NORMAL)
-                .setMinute(MaterialTimePicker.STYLE_NORMAL)
+                .setHour(viewModel.time.value!!.hour)
+                .setMinute(viewModel.time.value!!.hour)
                 .build()
 
         timePicker.show(childFragmentManager, "选择时间")
@@ -74,7 +82,7 @@ class AddFragment : Fragment() {
         val datePicker =
                 MaterialDatePicker.Builder.datePicker()
                         .setTitleText("选择日期")
-                        .setSelection(MaterialDatePicker.todayInUtcMilliseconds())
+                        .setSelection(viewModel.time.value?.date)
                         .build()
 
         datePicker.show(childFragmentManager, "选择")
@@ -83,4 +91,5 @@ class AddFragment : Fragment() {
             viewModel.time.value!!.date = datePicker.selection!!
         }
     }
+
 }

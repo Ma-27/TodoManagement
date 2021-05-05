@@ -8,8 +8,10 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
+import androidx.navigation.fragment.findNavController
 import com.example.todomanagement.R
 import com.example.todomanagement.databinding.FragmentOverviewBinding
+import com.example.todomanagement.util.EventObserver
 import com.example.todomanagement.util.setupSnackbar
 import com.google.android.material.snackbar.Snackbar
 import timber.log.Timber
@@ -48,6 +50,7 @@ class OverviewFragment : Fragment() {
         super.onActivityCreated(savedInstanceState)
         setupSnackbar()
         setupListAdapter()
+        setupNavigation()
     }
 
     private fun setupSnackbar() {
@@ -65,5 +68,16 @@ class OverviewFragment : Fragment() {
         } else {
             Timber.w("ViewModel not initialized when attempting to set up adapter.")
         }
+    }
+
+    private fun setupNavigation() {
+        viewModel.openTaskEvent.observe(viewLifecycleOwner, EventObserver {
+            openTaskDetails(it)
+        })
+    }
+
+    private fun openTaskDetails(taskId: String) {
+        val action = OverviewFragmentDirections.actionNavigationAllToModifyFragment(taskId)
+        findNavController().navigate(action)
     }
 }

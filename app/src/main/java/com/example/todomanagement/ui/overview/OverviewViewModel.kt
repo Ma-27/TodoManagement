@@ -14,7 +14,7 @@ class OverviewViewModel(application: Application) : AndroidViewModel(application
     //获取数据库
     private val tasksRepository = TaskRepository(TaskRoomDatabase.getInstance(application))
 
-    //开启任务时
+    //开启任务时，监测task更改，当点击时就转到add fragment
     private val _openTaskEvent = MutableLiveData<Event<String>>()
     val openTaskEvent: LiveData<Event<String>> = _openTaskEvent
 
@@ -36,5 +36,12 @@ class OverviewViewModel(application: Application) : AndroidViewModel(application
 
     fun showEditResultMessage() {
         showSnackbarMessage(R.string.successfully_saved_task_message)
+    }
+
+    /**
+     * 打开编辑task的界面
+     */
+    fun openTask(taskId: String) {
+        _openTaskEvent.value = Event(taskId)
     }
 }
