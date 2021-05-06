@@ -18,7 +18,7 @@ interface TaskDao {
      *
      * @return 返回所有在这个时间范围的列表
      */
-    @Query("SELECT * FROM Tasks WHERE end_time_milli BETWEEN :startTimestamp AND :endTimeStamp ORDER BY end_time_milli DESC")
+    @Query("SELECT * FROM Tasks WHERE end_time_milli BETWEEN :startTimestamp AND :endTimeStamp ORDER BY end_time_milli ASC")
     fun observeTaskInSection(startTimestamp: Long, endTimeStamp: Long): LiveData<List<Task>>
 
     /**

@@ -40,7 +40,7 @@ class Converter {
 
         fun formatDateTimeStringOneDay(millSec: Long?): String {
             val date = millSec?.let { Date(it) }
-            val format = SimpleDateFormat("HH:mm:ss", Locale.CHINA)
+            val format = SimpleDateFormat("HH 时 mm 分", Locale.CHINA)
             return format.format(date)
         }
 
