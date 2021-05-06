@@ -16,6 +16,9 @@
         <action
             android:id="@+id/action_navigation_all_to_modifyFragment"
             app:destination="@id/modifyFragment" />
+        <argument
+            android:name="categoryId"
+            app:argType="long" />
     </fragment>
 
     <fragment
@@ -28,7 +31,11 @@
         android:id="@+id/navigation_tasklist"
         android:name="com.example.todomanagement.ui.tasklist.TaskListFragment"
         android:label="@string/title_tasklist"
-        tools:layout="@layout/fragment_tasklist" />
+        tools:layout="@layout/fragment_tasklist">
+        <action
+            android:id="@+id/action_navigation_tasklist_to_navigation_overview"
+            app:destination="@id/navigation_overview" />
+    </fragment>
     <fragment
         android:id="@+id/addFragment"
         android:name="com.example.todomanagement.ui.add.AddFragment"

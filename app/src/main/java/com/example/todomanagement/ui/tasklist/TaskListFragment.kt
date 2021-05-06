@@ -10,10 +10,12 @@ import android.widget.EditText
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
 import com.example.todomanagement.R
 import com.example.todomanagement.database.Category
 import com.example.todomanagement.databinding.FragmentTasklistBinding
+import com.example.todomanagement.util.EventObserver
 import timber.log.Timber
 
 
@@ -48,6 +50,18 @@ class TaskListFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         setupListAdapter()
+        setupNavigation()
+    }
+
+    private fun setupNavigation() {
+        viewModel.openOverviewEvent.observe(viewLifecycleOwner, EventObserver {
+            openOverviewFragment(it)
+        })
+    }
+
+    private fun openOverviewFragment(it: String) {
+        val action = TaskListFragmentDirections.actionNavigationTasklistToNavigationOverview(it.toLong())
+        findNavController().navigate(action)
     }
 
     private fun setupListAdapter() {

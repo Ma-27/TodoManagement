@@ -5,7 +5,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.todomanagement.database.Task
-import com.example.todomanagement.databinding.ItemTaskBinding
+import com.example.todomanagement.databinding.ItemOverviewBinding
 
 class OverviewAdapter(private val viewModel: OverviewViewModel) :
         ListAdapter<Task, OverviewAdapter.ViewHolder>(OverviewDiffCallback()) {
@@ -19,7 +19,7 @@ class OverviewAdapter(private val viewModel: OverviewViewModel) :
         holder.bind(viewModel, item)
     }
 
-    class ViewHolder constructor(val binding: ItemTaskBinding) :
+    class ViewHolder constructor(val binding: ItemOverviewBinding) :
             RecyclerView.ViewHolder(binding.root) {
 
         fun bind(viewModel: OverviewViewModel, item: Task) {
@@ -31,7 +31,7 @@ class OverviewAdapter(private val viewModel: OverviewViewModel) :
         companion object {
             fun from(parent: ViewGroup): ViewHolder {
                 val layoutInflater = LayoutInflater.from(parent.context)
-                val binding = ItemTaskBinding.inflate(layoutInflater, parent, false)
+                val binding = ItemOverviewBinding.inflate(layoutInflater, parent, false)
                 return ViewHolder(binding)
             }
         }

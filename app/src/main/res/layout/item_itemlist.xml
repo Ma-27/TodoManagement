@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
 
@@ -22,5 +23,6 @@
         android:layout_marginLeft="@dimen/activity_horizontal_margin"
         android:text="@{category.title}"
         app:onLongClick_category="@{category}"
+        android:onClick="@{() -> viewmodel.openOverview(category.id)}"
         android:textAppearance="@style/TextAppearance.AppCompat.Title" />
 </layout>
