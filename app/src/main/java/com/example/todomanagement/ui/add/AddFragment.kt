@@ -24,9 +24,9 @@ class AddFragment : Fragment() {
     private lateinit var viewModel: AddViewModel
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
+            inflater: LayoutInflater, container: ViewGroup?,
+            savedInstanceState: Bundle?
+    ): View {
         //初始化view model
         viewModel = ViewModelProvider(this,
                 AddViewModelFactory(requireNotNull(this.activity).application))

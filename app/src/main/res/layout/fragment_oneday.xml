@@ -26,9 +26,6 @@
                 android:layout_height="match_parent"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                 app:oneday_items="@{viewmodel.items}" />
-
-            <!--app:items="@{viewmodel.items}"-->
-
         </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>

@@ -28,6 +28,17 @@ class TaskRepository(private val database: TaskRoomDatabase) {
     }
 
     /**
+     * 将单个task所属的分类保存到category数据库
+     */
+    suspend fun saveCategory(category: Category) {
+        coroutineScope {
+            launch {
+                database.categoryDao.insertCategory(category)
+            }
+        }
+    }
+
+    /**
      * 观察所有task的数据
      *
      * @return 返回所有live data型数据
@@ -43,6 +54,10 @@ class TaskRepository(private val database: TaskRoomDatabase) {
         val today = MaterialDatePicker.todayInUtcMilliseconds()
         val tomorrow = Converter.getTomorrowInMillSec(today)
         return database.taskDao.observeTaskInSection(today, tomorrow)
+    }
+
+    fun getCategories(): LiveData<List<Category>> {
+        return database.categoryDao.observeCategory()
     }
 
     /**

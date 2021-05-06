@@ -9,7 +9,7 @@ class OverviewModelFactory(private val application: Application) : ViewModelProv
         if (modelClass.isAssignableFrom(OverviewViewModel::class.java)) {
             return OverviewViewModel(application) as T
         } else {
-            throw IllegalArgumentException("Unknown ViewModel class")
+            throw IllegalArgumentException("未知的view Model类，可能传入了错误的view model")
         }
     }
 }

@@ -22,7 +22,11 @@ data class Task @JvmOverloads constructor(
         @ColumnInfo(name = "completed")
         var isCompleted: Boolean = false,
 
-        @PrimaryKey @ColumnInfo(name = "entryid") var id: String = UUID.randomUUID().toString()
+        @ColumnInfo(name = "category")
+        var category: String = "默认分类",
+
+        @PrimaryKey
+        @ColumnInfo(name = "entryid") var id: String = UUID.randomUUID().toString()
 ) {
     val titleForList: String
         get() = if (title.isNotEmpty()) title else description

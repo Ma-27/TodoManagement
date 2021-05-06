@@ -1,15 +1,14 @@
-package com.example.todomanagement.ui.oneday
+package com.example.todomanagement.ui.tasklist
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.example.todomanagement.database.Task
-import com.example.todomanagement.databinding.ItemOnedayBinding
+import com.example.todomanagement.database.Category
+import com.example.todomanagement.databinding.ItemItemlistBinding
 
-class OneDayAdapter(private val viewModel: OneDayViewModel) :
-    ListAdapter<Task, OneDayAdapter.ViewHolder>(OneDayDiffCallback()) {
-
+class TaskListAdapter(private val viewModel: TaskListViewModel) :
+        ListAdapter<Category, TaskListAdapter.ViewHolder>(TaskListDiffCallback()) {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder.from(parent)
     }
@@ -19,19 +18,19 @@ class OneDayAdapter(private val viewModel: OneDayViewModel) :
         holder.bind(viewModel, item)
     }
 
-    class ViewHolder constructor(val binding: ItemOnedayBinding) :
-        RecyclerView.ViewHolder(binding.root) {
+    class ViewHolder constructor(val binding: ItemItemlistBinding) :
+            RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(viewModel: OneDayViewModel, item: Task) {
+        fun bind(viewModel: TaskListViewModel, item: Category) {
             binding.viewmodel = viewModel
-            binding.task = item
+            binding.category = item
             binding.executePendingBindings()
         }
 
         companion object {
             fun from(parent: ViewGroup): ViewHolder {
                 val layoutInflater = LayoutInflater.from(parent.context)
-                val binding = ItemOnedayBinding.inflate(layoutInflater, parent, false)
+                val binding = ItemItemlistBinding.inflate(layoutInflater, parent, false)
                 return ViewHolder(binding)
             }
         }

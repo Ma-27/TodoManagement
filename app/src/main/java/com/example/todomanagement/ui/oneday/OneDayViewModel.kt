@@ -14,8 +14,4 @@ class OneDayViewModel(application: Application) : AndroidViewModel(application) 
     //我的一天的数据集
     private val _items = tasksRepository.getTodayTask()
     val items: LiveData<List<Task>> = _items
-
-    fun getTodayTime(task: Task): String {
-        return "成"
-    }
 }

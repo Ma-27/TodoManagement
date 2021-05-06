@@ -21,10 +21,10 @@ class AlarmReceiver : BroadcastReceiver() {
                 NotificationManager::class.java
         ) as NotificationManager
 
-        if (title.isNullOrEmpty()) {
+        if (title.isEmpty()) {
             title = "默认标题"
         }
-        if (description.isNullOrEmpty()) {
+        if (description.isEmpty()) {
             description = "默认内容"
         }
 

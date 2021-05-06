@@ -57,7 +57,7 @@ class OneDayFragment : Fragment() {
                 )
             )
         } else {
-            Timber.e("ViewModel not initialized when attempting to set up adapter.")
+            Timber.e("试图设置adapter时ViewModel尚未初始化。")
         }
     }
 }

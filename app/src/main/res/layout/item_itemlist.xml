@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <data>
+
+        <variable
+            name="category"
+            type="com.example.todomanagement.database.Category" />
+
+        <variable
+            name="viewmodel"
+            type="com.example.todomanagement.ui.tasklist.TaskListViewModel" />
+
+    </data>
+
+    <TextView
+        android:id="@+id/category_text"
+        android:layout_width="match_parent"
+        android:layout_height="?android:attr/listPreferredItemHeightSmall"
+        android:layout_gravity="center_vertical"
+        android:layout_marginStart="@dimen/activity_horizontal_margin"
+        android:layout_marginLeft="@dimen/activity_horizontal_margin"
+        android:text="@{category.title}"
+        android:textAppearance="@style/TextAppearance.AppCompat.Title" />
+</layout>

@@ -5,9 +5,11 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.databinding.BindingAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.example.todomanagement.database.Category
 import com.example.todomanagement.database.Task
 import com.example.todomanagement.ui.oneday.OneDayAdapter
 import com.example.todomanagement.ui.overview.OverviewAdapter
+import com.example.todomanagement.ui.tasklist.TaskListAdapter
 
 /**
  *设置数据绑定，其中app：overview_item在布局代码中引用为名，具体见布局代码,只能给overview布局使用
@@ -26,6 +28,16 @@ fun setItemsInOverview(listView: RecyclerView, items: List<Task>?) {
 fun setItemsInOneDay(listView: RecyclerView, items: List<Task>?) {
     items?.let {
         (listView.adapter as OneDayAdapter).submitList(items)
+    }
+}
+
+/**
+ *设置recycler view数据绑定
+ */
+@BindingAdapter("app:tasklist_items")
+fun setItemsInTaskList(listView: RecyclerView, items: List<Category>?) {
+    items?.let {
+        (listView.adapter as TaskListAdapter).submitList(items)
     }
 }
 

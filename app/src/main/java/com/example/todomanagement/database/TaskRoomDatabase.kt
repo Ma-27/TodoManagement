@@ -5,9 +5,10 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 
-@Database(entities = [Task::class], version = 2, exportSchema = false)
+@Database(entities = [Task::class, Category::class], version = 6, exportSchema = false)
 abstract class TaskRoomDatabase : RoomDatabase() {
     abstract val taskDao: TaskDao
+    abstract val categoryDao: CategoryDao
 
     companion object {
         //volatile注释不允许缓存该变量
@@ -18,7 +19,7 @@ abstract class TaskRoomDatabase : RoomDatabase() {
             synchronized(this) {
                 var instance = INSTANCE
 
-                // If instance is `null` make a new database instance.
+                // TODO 如果数据库为空，那么就新建一个数据库实例，不允许数据库转移储存
                 if (instance == null) {
                     instance = Room.databaseBuilder(
                             context.applicationContext,
@@ -26,11 +27,11 @@ abstract class TaskRoomDatabase : RoomDatabase() {
                             "task_database")
                             .fallbackToDestructiveMigration()
                             .build()
-                    // Assign INSTANCE to the newly created database.
+                    // 将INSTANCE分配给新创建的数据库。
                     INSTANCE = instance
                 }
 
-                // Return instance; smart cast to be non-null.
+                // 返回一个数据库实例
                 return instance
             }
         }
