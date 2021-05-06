@@ -37,5 +37,19 @@ class Converter {
             val format = SimpleDateFormat("提醒时间被设定为：yyyy-MM-dd HH:mm:ss", Locale.CHINA)
             return format.format(date)
         }
+
+        fun formatDateTimeStringOneDay(millSec: Long?): String {
+            val date = millSec?.let { Date(it) }
+            val format = SimpleDateFormat("HH:mm:ss", Locale.CHINA)
+            return format.format(date)
+        }
+
+        fun getTomorrowInMillSec(today: Long): Long {
+            val hours: Long = 24
+            val minutes = hours * 60
+            val seconds = minutes * 60
+            val millSeconds = seconds * 1000
+            return today + millSeconds
+        }
     }
 }

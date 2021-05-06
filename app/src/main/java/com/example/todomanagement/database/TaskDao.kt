@@ -14,6 +14,14 @@ interface TaskDao {
     fun observeTasks(): LiveData<List<Task>>
 
     /**
+     * 通过起始时间观察任务
+     *
+     * @return 返回所有在这个时间范围的列表
+     */
+    @Query("SELECT * FROM Tasks WHERE end_time_milli BETWEEN :startTimestamp AND :endTimeStamp ORDER BY end_time_milli DESC")
+    fun observeTaskInSection(startTimestamp: Long, endTimeStamp: Long): LiveData<List<Task>>
+
+    /**
      * 通过id观察单个任务
      *
      * @param taskId 任务的id
@@ -23,7 +31,7 @@ interface TaskDao {
     fun observeTaskById(taskId: String): LiveData<Task>
 
     /**
-     * 选中所有的task
+     * 选中所有的task,注意，该task都是根据添加时间排序
      *
      * @return 返回非live data的格式 tasks.
      */

@@ -1,13 +1,14 @@
 package com.example.todomanagement.database
 
 import androidx.lifecycle.LiveData
+import com.example.todomanagement.util.Converter
+import com.google.android.material.datepicker.MaterialDatePicker
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 class TaskRepository(private val database: TaskRoomDatabase) {
-    val tasks: LiveData<List<Task>> = database.taskDao.observeTasks()
 
     suspend fun insertSingleTask(task: Task) {
         withContext(Dispatchers.IO) {
@@ -15,6 +16,9 @@ class TaskRepository(private val database: TaskRoomDatabase) {
         }
     }
 
+    /**
+     * 保存单个任务，有冲突就合并
+     */
     suspend fun saveTask(task: Task) {
         coroutineScope {
             launch {
@@ -32,6 +36,20 @@ class TaskRepository(private val database: TaskRoomDatabase) {
         return database.taskDao.observeTasks()
     }
 
+    /**
+     * 观察今天的task，对task进行筛选并提取
+     */
+    fun getTodayTask(): LiveData<List<Task>> {
+        val today = MaterialDatePicker.todayInUtcMilliseconds()
+        val tomorrow = Converter.getTomorrowInMillSec(today)
+        return database.taskDao.observeTaskInSection(today, tomorrow)
+    }
+
+    /**
+     * 观察单个给定id的task
+     *
+     * @return LiveData<Task>型数据
+     */
     fun observeTaskById(taskId: String): LiveData<Task> {
         return database.taskDao.observeTaskById(taskId)
     }
@@ -40,8 +58,7 @@ class TaskRepository(private val database: TaskRoomDatabase) {
      * 返回单个task的数据
      */
     suspend fun getTaskById(taskId: String): Task? {
-        val task = database.taskDao.getTaskById(taskId)
-        return task
+        return database.taskDao.getTaskById(taskId)
     }
 
     /**
@@ -55,6 +72,9 @@ class TaskRepository(private val database: TaskRoomDatabase) {
         }
     }
 
+    /**
+     * 将任务标记为完成了
+     */
     suspend fun taskMarkedCompleted(taskId: String) {
         coroutineScope {
             launch {
@@ -63,6 +83,9 @@ class TaskRepository(private val database: TaskRoomDatabase) {
         }
     }
 
+    /**
+     * 将任务标记为未完成
+     */
     suspend fun taskMarkedPending(taskId: String) {
         coroutineScope {
             launch {

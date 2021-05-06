@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.DividerItemDecoration
 import com.example.todomanagement.R
 import com.example.todomanagement.databinding.FragmentOverviewBinding
 import com.example.todomanagement.util.EventObserver
@@ -65,6 +66,13 @@ class OverviewFragment : Fragment() {
         if (viewModel != null) {
             listAdapter = OverviewAdapter(viewModel)
             binding.recyclerViewOverview.adapter = listAdapter
+            //添加Android自带的分割线
+            binding.recyclerViewOverview.addItemDecoration(
+                DividerItemDecoration(
+                    activity,
+                    DividerItemDecoration.VERTICAL
+                )
+            )
         } else {
             Timber.w("ViewModel not initialized when attempting to set up adapter.")
         }
@@ -79,9 +87,5 @@ class OverviewFragment : Fragment() {
     private fun openTaskDetails(taskId: String) {
         val action = OverviewFragmentDirections.actionNavigationAllToModifyFragment(taskId)
         findNavController().navigate(action)
-    }
-
-    private fun showDialog() {
-
     }
 }

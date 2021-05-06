@@ -23,7 +23,7 @@
             android:layout_width="match_parent"
             android:id="@+id/recycler_view_overview"
             android:layout_height="match_parent"
-            app:items="@{viewmodel.items}"
+            app:overview_items="@{viewmodel.items}"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton

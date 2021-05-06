@@ -30,7 +30,6 @@ class OverviewViewModel(application: Application) : AndroidViewModel(application
     val dataLoading: LiveData<Boolean> = _dataLoading
 
     private val _items = tasksRepository.observeTasks()
-
     val items: LiveData<List<Task>> = _items
 
     private fun showSnackbarMessage(message: Int) {

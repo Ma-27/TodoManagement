@@ -12,36 +12,46 @@
 
         <variable
             name="viewmodel"
-            type="com.example.todomanagement.ui.overview.OverviewViewModel" />
+            type="com.example.todomanagement.ui.oneday.OneDayViewModel" />
     </data>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
+        android:orientation="vertical"
         android:paddingLeft="@dimen/activity_horizontal_margin"
         android:paddingTop="@dimen/list_item_padding"
         android:paddingRight="@dimen/activity_horizontal_margin"
-        android:onClick="@{() -> viewmodel.openTask(task.id)}"
         android:paddingBottom="@dimen/list_item_padding">
 
-        <CheckBox
-            android:id="@+id/complete_checkbox"
+        <TextView
+            android:id="@+id/tv_oneday_time"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:onClick="@{(view) -> viewmodel.completeTask(task.id, ((CompoundButton)view).isChecked())}"
-            android:checked="@{task.completed}" />
+            android:layout_marginStart="@dimen/activity_horizontal_margin"
+            android:layout_marginLeft="@dimen/activity_horizontal_margin"
+            android:textAppearance="@style/TextAppearance.AppCompat.Title"
+            app:oneday_time_string="@{task}" />
 
         <TextView
-            android:id="@+id/title_text"
+            android:id="@+id/tv_oneday_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:layout_marginStart="@dimen/activity_horizontal_margin"
             android:layout_marginLeft="@dimen/activity_horizontal_margin"
-            android:textAppearance="@style/TextAppearance.AppCompat.Title"
             android:text="@{task.titleForList}"
-            app:completedTask="@{task.completed}" />
+            android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
+
+        <TextView
+            android:id="@+id/tv_oneday_content"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginStart="@dimen/activity_horizontal_margin"
+            android:layout_marginLeft="@dimen/activity_horizontal_margin"
+            android:text="@{task.description}"
+            android:textAppearance="@style/TextAppearance.AppCompat.Body2" />
     </LinearLayout>
+
 </layout>

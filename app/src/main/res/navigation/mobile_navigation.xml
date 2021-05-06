@@ -20,7 +20,7 @@
 
     <fragment
         android:id="@+id/navigation_oneday"
-        android:name="com.example.todomanagement.ui.oneday.OnedayFragment"
+        android:name="com.example.todomanagement.ui.oneday.OneDayFragment"
         android:label="@string/title_oneday"
         tools:layout="@layout/fragment_oneday" />
 
