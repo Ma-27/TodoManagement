@@ -1,6 +1,7 @@
 package com.example.todomanagement.ui.overview
 
 import android.graphics.Paint
+import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.databinding.BindingAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -23,4 +24,9 @@ fun setStyle(textView: TextView, enabled: Boolean) {
     } else {
         textView.paintFlags = textView.paintFlags and Paint.STRIKE_THRU_TEXT_FLAG.inv()
     }
+}
+
+@BindingAdapter("onLongClick")
+fun setOnLongClickListener(linearLayout: LinearLayout, taskId: String) {
+
 }

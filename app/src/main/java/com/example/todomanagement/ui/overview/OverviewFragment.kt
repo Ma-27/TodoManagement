@@ -80,4 +80,8 @@ class OverviewFragment : Fragment() {
         val action = OverviewFragmentDirections.actionNavigationAllToModifyFragment(taskId)
         findNavController().navigate(action)
     }
+
+    private fun showDialog() {
+
+    }
 }

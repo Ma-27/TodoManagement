@@ -11,6 +11,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.example.todomanagement.R
 import com.example.todomanagement.databinding.FragmentModifyBinding
@@ -53,12 +54,10 @@ class ModifyFragment : Fragment() {
                 getString(R.string.notification_channel_name)
         )
 
-        /*
-        viewModel.time.observe(viewLifecycleOwner, Observer {
-            val timestamp = Converter.convertDateTimeToMillSec(it.date,it.hour,it.minute)
-            binding.tvModifyShowTime.text = Converter.formatDateTimeString(timestamp)
+        viewModel.timeString.observe(viewLifecycleOwner, Observer {
+            binding.tvModifyShowTime.text = it
         })
-         */
+
 
         return binding.root
     }

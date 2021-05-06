@@ -7,10 +7,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.SystemClock
 import androidx.core.app.AlarmManagerCompat
-import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
 import com.example.todomanagement.R
 import com.example.todomanagement.database.Task
 import com.example.todomanagement.database.TaskRepository
@@ -39,6 +36,10 @@ class ModifyViewModel(application: Application, taskId: String) : AndroidViewMod
     //时间辅助类，使用livedata响应用户更改
     val time = MutableLiveData<DateTime>()
 
+    val timeString = Transformations.map(task) {
+        return@map Converter.formatDateTimeString(task.value?.endTimeMilli)
+    }
+
     //snackbar显示内容
     private val _snackbarText = MutableLiveData<Event<Int>>()
     val snackbarText: LiveData<Event<Int>> = _snackbarText
@@ -50,12 +51,13 @@ class ModifyViewModel(application: Application, taskId: String) : AndroidViewMod
     init {
         viewModelScope.launch {
             task.value = tasksRepository.getTaskById(taskId)
-        }
-        //将保存了的秒数转化为time和date
-        if (task.value != null) {
-            time.value = Converter.convertMillSecToDateTime(task.value!!.endTimeMilli)
-        } else {
-            time.value = DateTime()
+
+            //将保存了的秒数转化为time和date
+            if (task.value != null) {
+                time.value = Converter.convertMillSecToDateTime(task.value!!.endTimeMilli)
+            } else {
+                time.value = DateTime()
+            }
         }
     }
 
