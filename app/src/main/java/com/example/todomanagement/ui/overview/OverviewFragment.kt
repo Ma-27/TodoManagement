@@ -1,5 +1,6 @@
 package com.example.todomanagement.ui.overview
 
+import android.app.AlertDialog
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -11,6 +12,7 @@ import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
 import com.example.todomanagement.R
+import com.example.todomanagement.database.Task
 import com.example.todomanagement.databinding.FragmentOverviewBinding
 import com.example.todomanagement.util.EventObserver
 import com.example.todomanagement.util.setupSnackbar
@@ -87,5 +89,15 @@ class OverviewFragment : Fragment() {
     private fun openTaskDetails(taskId: String) {
         val action = OverviewFragmentDirections.actionNavigationAllToModifyFragment(taskId)
         findNavController().navigate(action)
+    }
+
+    fun deleteTask(item: Task) {
+        val builder = AlertDialog.Builder(context)
+        builder.setTitle("确定要删除 " + item.title + " 吗")
+                .setMessage(item.description)
+                .setPositiveButton("确定") { dialog, which ->
+                    viewModel.deleteTask(item.id)
+                }
+                .show()
     }
 }

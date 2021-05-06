@@ -12,6 +12,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DividerItemDecoration
 import com.example.todomanagement.R
+import com.example.todomanagement.database.Category
 import com.example.todomanagement.databinding.FragmentTasklistBinding
 import timber.log.Timber
 
@@ -77,6 +78,15 @@ class TaskListFragment : Fragment() {
                     viewModel.addCategory(input.text.toString())
                 }
                 .setView(input)
+                .show()
+    }
+
+    fun deleteTask(item: Category) {
+        val builder = AlertDialog.Builder(context)
+        builder.setTitle("确定要删除 " + item.title + " 吗")
+                .setPositiveButton("确定") { dialog, which ->
+                    viewModel.deleteTask(item.id)
+                }
                 .show()
     }
 }

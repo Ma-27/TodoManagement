@@ -11,7 +11,6 @@ import com.example.todomanagement.database.TaskRepository
 import com.example.todomanagement.database.TaskRoomDatabase
 import com.example.todomanagement.util.Event
 import kotlinx.coroutines.launch
-import timber.log.Timber
 
 class OverviewViewModel(application: Application) : AndroidViewModel(application) {
     //获取数据库
@@ -61,6 +60,8 @@ class OverviewViewModel(application: Application) : AndroidViewModel(application
     }
 
     fun deleteTask(taskId: String) {
-        Timber.d("可食用")
+        viewModelScope.launch {
+            tasksRepository.deleteTaskById(taskId)
+        }
     }
 }

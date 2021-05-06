@@ -108,4 +108,26 @@ class TaskRepository(private val database: TaskRoomDatabase) {
             }
         }
     }
+
+    /**
+     * 根据id删除任务
+     */
+    suspend fun deleteTaskById(taskId: String) {
+        coroutineScope {
+            launch {
+                database.taskDao.deleteTaskById(taskId)
+            }
+        }
+    }
+
+    /**
+     * 根据id删除category
+     */
+    suspend fun deleteCategoryById(taskId: Long) {
+        coroutineScope {
+            launch {
+                database.categoryDao.deleteCategoryById(taskId)
+            }
+        }
+    }
 }

@@ -23,7 +23,8 @@
         android:paddingTop="@dimen/list_item_padding"
         android:paddingRight="@dimen/activity_horizontal_margin"
         android:onClick="@{() -> viewmodel.openTask(task.id)}"
-        android:paddingBottom="@dimen/list_item_padding">
+        android:paddingBottom="@dimen/list_item_padding"
+        app:onLongClick_task="@{task}">
 
         <CheckBox
             android:id="@+id/complete_checkbox"

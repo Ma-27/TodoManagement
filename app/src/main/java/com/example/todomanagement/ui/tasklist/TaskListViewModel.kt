@@ -22,4 +22,10 @@ class TaskListViewModel(application: Application) : AndroidViewModel(application
             tasksRepository.saveCategory(Category(content))
         }
     }
+
+    fun deleteTask(id: Long) {
+        viewModelScope.launch {
+            tasksRepository.deleteCategoryById(id)
+        }
+    }
 }
